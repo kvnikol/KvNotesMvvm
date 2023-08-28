@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KvNotesMvvmTheme {
                 Scaffold(topBar = {
-                    TopAppBar(title = { Text(text = "AppNote")}, backgroundColor = Color.Cyan,
+                    TopAppBar(title = { Text(text = "AppNote")}, backgroundColor = Color.Blue,
                         contentColor = Color.White,
                         elevation = 12.dp
                     )
@@ -33,14 +33,6 @@ class MainActivity : ComponentActivity() {
                     }
                 })
 
-                // A surface container using the 'background' color from the theme
-               // Surface(
-                   // modifier = Modifier.fillMaxSize(),
-                   // color = MaterialTheme.colors.background
-               // ) {
-                   // Greeting("Android")
-                 //   NoteNavHost()
-              //  }
             }
         }
     }
