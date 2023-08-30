@@ -33,10 +33,10 @@ import com.vladimirk.kvnotesmvvm.ui.theme.KvNotesMvvmTheme
 
 
 @Composable
-fun MainScreen(navHostController: NavHostController){
-    val  context= LocalContext.current
-    val viewModel: MainViewModel = viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-    val  notes = viewModel.readText.observeAsState(listOf()).value
+fun MainScreen(navHostController: NavHostController,viewModel: MainViewModel){
+   // val  context= LocalContext.current
+   // val viewModel: MainViewModel = viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    val  notes = viewModel.readAllNotes().observeAsState(listOf()).value
    // val items: List<Note>? by viewModel.readText.observeAsState()
 
 
@@ -52,8 +52,8 @@ fun MainScreen(navHostController: NavHostController){
           //  NoteItem(title = "NoteItem 4", subtitle ="Subtitle for note 4" , navHostController =navHostController)
 
      //   }
-      LazyColumn{
-         items(notes) { note ->
+     LazyColumn{
+        items(notes) { note ->
              NoteItem(note =note, navHostController =navHostController)
          }
       }
@@ -86,7 +86,9 @@ fun NoteItem(note:Note,navHostController:NavHostController){
 @Composable
 fun PrevMainScreen() {
     KvNotesMvvmTheme {
-        MainScreen(navHostController = rememberNavController())
+        val  context= LocalContext.current
+        val mViewModel: MainViewModel = viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+        MainScreen(navHostController = rememberNavController(), viewModel= mViewModel)
 
     }
 }

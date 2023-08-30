@@ -1,5 +1,6 @@
 package com.vladimirk.kvnotesmvvm.screens
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,17 +11,21 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.vladimirk.kvnotesmvvm.MainViewModel
+import com.vladimirk.kvnotesmvvm.MainViewModelFactory
 import com.vladimirk.kvnotesmvvm.navigation.NavRoute
 import com.vladimirk.kvnotesmvvm.ui.theme.KvNotesMvvmTheme
 
 @Composable
-fun NoteScreen(navHostController: NavHostController){
+fun NoteScreen(navHostController: NavHostController,viewModel: MainViewModel){
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,7 +57,9 @@ fun NoteScreen(navHostController: NavHostController){
 @Composable
 fun PrevNoteScreen() {
     KvNotesMvvmTheme {
-        NoteScreen(navHostController = rememberNavController())
+        val  context= LocalContext.current
+        val mViewModel: MainViewModel = viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+        NoteScreen(navHostController = rememberNavController(), viewModel = mViewModel)
 
     }
 }

@@ -28,10 +28,10 @@ import com.vladimirk.kvnotesmvvm.utils.TYPE_FIREBASE
 import com.vladimirk.kvnotesmvvm.utils.TYPE_ROOM
 
 @Composable
-fun StartScreen(navHostController: NavHostController){
+fun StartScreen(navHostController: NavHostController,viewModel: MainViewModel){
 
-    val  context= LocalContext.current
-    val ViewModel:MainViewModel= viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+  //  val  context= LocalContext.current
+   // val ViewModel:MainViewModel= viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
 
        Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize(),
@@ -40,16 +40,20 @@ fun StartScreen(navHostController: NavHostController){
         ) {
              Text(text = "What will me use?")
              Button(onClick = {
-                 ViewModel.initDataBase(TYPE_ROOM)
-                 navHostController.navigate(route = NavRoute.Main.route) }, modifier = Modifier
+                 viewModel.initDataBase(TYPE_ROOM){
+                     navHostController.navigate(route = NavRoute.Main.route)
+                 }
+                }, modifier = Modifier
                  .width(200.dp)
                  .padding(vertical = 8.dp)) {
                   Text(text = "Room database")
 
              }
             Button(onClick = {
-                ViewModel.initDataBase(TYPE_FIREBASE)
-                navHostController.navigate(route = NavRoute.Main.route) }, modifier = Modifier
+                viewModel.initDataBase(TYPE_FIREBASE){
+                    navHostController.navigate(route = NavRoute.Main.route)
+                }
+               }, modifier = Modifier
                 .width(200.dp)
                 .padding(vertical = 8.dp)) {
                 Text(text = "Firebase database")
@@ -67,7 +71,11 @@ fun StartScreen(navHostController: NavHostController){
 @Composable
 fun PrevStartScreen(){
      KvNotesMvvmTheme {
-          StartScreen(navHostController = rememberNavController())
+         val  context= LocalContext.current
+         val mViewModel: MainViewModel = viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+          StartScreen(navHostController = rememberNavController(), viewModel = mViewModel)
+
+
           
      }
 

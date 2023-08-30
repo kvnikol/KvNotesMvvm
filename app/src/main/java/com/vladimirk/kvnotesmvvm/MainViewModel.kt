@@ -2,15 +2,21 @@ package com.vladimirk.kvnotesmvvm
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.vladimirk.kvnotesmvvm.models.Note
+import com.vladimirk.kvnotesmvvm.room.AppRoomDataBase
+import com.vladimirk.kvnotesmvvm.room.repository.RoomRepository
+import com.vladimirk.kvnotesmvvm.utils.REPOSITORY
 import com.vladimirk.kvnotesmvvm.utils.TYPE_FIREBASE
 import com.vladimirk.kvnotesmvvm.utils.TYPE_ROOM
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) :AndroidViewModel(application) {
+   // private val _creditCards = MutableLiveData<List<CreditCard>>()
+   // val creditCards: LiveData<List<CreditCard>> = _creditCards
+
+    val context=application
     val readText:MutableLiveData<List<Note>> by lazy {
         MutableLiveData<List<Note>>()
     }
@@ -35,9 +41,29 @@ class MainViewModel(application: Application) :AndroidViewModel(application) {
             }
     }
 
+    fun addNote(note: Note,onSuccess: () -> Unit){
+        viewModelScope.launch(Dispatchers.IO){
+          REPOSITORY.create(note = note){
+              viewModelScope.launch (Dispatchers.Main){
+                  onSuccess()
+              }
 
-    fun initDataBase(type:String){
-        dbType.value=type
+          }
+        }
+    }
+     fun readAllNotes()= REPOSITORY.reedAll
+
+
+
+    fun initDataBase(type:String,onSuccess:()->Unit){
+       // dbType.value=type
+        when(type){
+            TYPE_ROOM->{
+                val dao=AppRoomDataBase.getInstance(context = context).getRoomDao()
+                REPOSITORY= RoomRepository(dao)
+                onSuccess()
+            }
+        }
         Log.i("Tag","init data base from application database state : $type")
     }
 }
